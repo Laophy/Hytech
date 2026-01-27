@@ -28,9 +28,8 @@ hytale {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(javaVersion)
+        vendor = JvmVendorSpec.ADOPTIUM
     }
-
-    withSourcesJar()
 }
 
 tasks.named<ProcessResources>("processResources") {

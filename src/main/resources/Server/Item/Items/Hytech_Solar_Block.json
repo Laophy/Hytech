@@ -1,9 +1,9 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Example_Block.name"
+    "Name": "server.items.Hytech_Solar_Block.name"
   },
   "ItemLevel": 600,
-  "Icon": "Icons/ItemsGenerated/Example_Block.png",
+  "Icon": "Icons/ItemsGenerated/Hytech_Solar_Block.png",
   "Categories": [
     "Blocks.Soils"
   ],
@@ -11,9 +11,11 @@
   "Set": "Soil",
   "BlockType": {
     "Material": "Solid",
-    "DrawType": "Cube",
+    "DrawType": "Model",
     "Group": "Dirt",
-    "Flags": {},
+    "Flags": {
+      "IsUsable": true
+    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Soils"
@@ -22,7 +24,7 @@
     "BlockParticleSetId": "Sand",
     "Textures": [
       {
-        "All": "BlockTextures/Example_Block.png",
+        "All": "BlockTextures/Hytech_Solar_Block.png",
         "Weight": 1
       }
     ],
@@ -33,7 +35,16 @@
       "Stone",
       "Lava",
       "Dirt"
-    ]
+    ],
+    "CustomModelTexture": [
+      {
+        "Texture": "BlockTextures/Hytech_Solar_Block.png"
+      }
+    ],
+    "CustomModel": "Blocks/Tech_Solar_Block.blockymodel",
+    "Interactions": {
+      "Use": "ConfigureSolar"
+    }
   },
   "Tags": {
     "Type": [

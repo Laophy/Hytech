@@ -1,4 +1,4 @@
-package com.LakeCountryGames.plugin;
+package com.LakeCountryGames.plugin.commands;
 
 import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.Message;
@@ -15,14 +15,14 @@ public class ExampleCommand extends CommandBase {
     private final String pluginVersion;
 
     public ExampleCommand(String pluginName, String pluginVersion) {
-        super("test", "Prints a test message from the " + pluginName + " plugin.");
-        this.setPermissionGroup(GameMode.Adventure); // Allows the command to be used by anyone, not just OP
+        super("hytech", "Displays the test version number for " + pluginName  + " plugin.");
+        this.setPermissionGroup(GameMode.Adventure);
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;
     }
 
     @Override
     protected void executeSync(@Nonnull CommandContext ctx) {
-        ctx.sendMessage(Message.raw("Hello from the " + pluginName + " v" + pluginVersion + " plugin!"));
+        ctx.sendMessage(Message.raw("Hytech Plugin [" + pluginName + " v" + pluginVersion + "]!"));
     }
 }

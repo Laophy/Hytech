@@ -19,9 +19,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class Hytech extends JavaPlugin {
     private static Hytech instance;
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private ComponentType energyComponentType;
+    private ComponentType<ChunkStore, EnergyComponent> energyComponentType;
 
-    private ComponentType<ChunkStore, EnergyComponent> energyComponent;
 
     public Hytech(JavaPluginInit init) {
         super(init);
@@ -39,15 +38,12 @@ public class Hytech extends JavaPlugin {
 
         // TODO: Convert to ECS systems
         // Register event systems (LEGACY??????)
-        this.getEntityStoreRegistry().registerSystem(new PowerNetworkSystem());
-        this.getEntityStoreRegistry().registerSystem(new SolarPlacedEvent());
-        this.getEntityStoreRegistry().registerSystem(new SolarBreakEvent());
+//        this.getEntityStoreRegistry().registerSystem(new PowerNetworkSystem());
+//        this.getEntityStoreRegistry().registerSystem(new SolarPlacedEvent());
+//        this.getEntityStoreRegistry().registerSystem(new SolarBreakEvent());
 
 
         this.energyComponentType = this.getChunkStoreRegistry().registerComponent(EnergyComponent.class, "EnergySystem", EnergyComponent.CODEC);
-
-        // System
-        //this.getEntityStoreRegistry().registerSystem(new EnergySystem(this.energyComponent));
     }
 
     @Override
@@ -56,7 +52,7 @@ public class Hytech extends JavaPlugin {
         this.getChunkStoreRegistry().registerSystem(new EnergyInitializer());
     }
 
-    public ComponentType getEnergyComponentType() {
+    public ComponentType<ChunkStore, EnergyComponent> getEnergyComponentType() {
         return this.energyComponentType;
     }
 

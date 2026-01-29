@@ -1,11 +1,13 @@
 package com.LakeCountryGames.plugin.components;
 
 import com.LakeCountryGames.plugin.Hytech;
+import com.LakeCountryGames.plugin.power.PowerNode;
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nullable;
 
 /**
@@ -14,45 +16,45 @@ import javax.annotation.Nullable;
  * Data Component, not a logical class
  */
 public class EnergyComponent implements Component<ChunkStore> {
-    public static final BuilderCodec CODEC;
-    private enum Type { SOLAR, WIRE, CAPACITOR, OTHER }
+    // CODEC will map the json data that was saved
+    // you must ensure the clone method is being used and not set to a new class.
+    public static final BuilderCodec<EnergyComponent> CODEC = BuilderCodec.builder(
+                    EnergyComponent.class,
+                    EnergyComponent::new
+            )
+            .append(new KeyedCodec<>("Type", Codec.STRING),
+                    (data, value) -> data.type = Type.valueOf(value),
+                    data -> data.type.name())
+            .add()
+            .append(new KeyedCodec<>("Energy", Codec.INTEGER),
+                    (data, value) -> data.energy = value,
+                    data -> data.energy)
+            .add()
+            .append(new KeyedCodec<>("Capacity", Codec.INTEGER),
+                    (data, value) -> data.capacity = value,
+                    data -> data.capacity)
+            .add()
+            .append(new KeyedCodec<>("EnergyPerTick", Codec.INTEGER),
+                    (data, value) -> data.energyPerTick = value,
+                    data -> data.energyPerTick)
+            .add()
+            .build();
 
-    private final Type type;
+    public enum Type { GENERATOR, STORAGE, TRANSFER }
+
+    private Type type;
     private int energy;
-    private int capacity; // TODO: Upgrade storage?
-    private float energyPerSecond;
-    private float tickInterval;
-
+    private int capacity;
+    private int energyPerTick;
 
     public EnergyComponent() {
-        this.type = Type.SOLAR;
+        this.type = Type.STORAGE;
         this.energy = 0;
-        this.capacity = 5000; // Default capacity
-        this.energyPerSecond = 1.0f; // Default energy Per Tick
-        this.tickInterval = 1.0f; // Default tick interval in seconds
+        this.capacity = 5000;
+        this.energyPerTick = 1;
     }
 
-    public EnergyComponent(Type type, int energy, int capacity, float energyPerSecond, float tickInterval) {
-        this.type = type;
-        this.energy = energy;
-        this.capacity = capacity;
-        this.energyPerSecond = energyPerSecond;
-        this.tickInterval = tickInterval;
-    }
-
-    public static ComponentType getComponentType() {
-        return Hytech.get().getEnergyComponentType();
-    }
-
-    @Nullable
-    @Override
-    public Component<ChunkStore> clone() {
-        return new EnergyComponent();
-    }
-
-    static {
-        CODEC = BuilderCodec.builder(EnergyComponent.class, EnergyComponent::new).build();
-    }
+    public EnergyComponent.Type getType() { return type; }
 
     public float getEnergy() {
         return energy;
@@ -62,18 +64,20 @@ public class EnergyComponent implements Component<ChunkStore> {
         return capacity;
     }
 
-    public float getEnergyPerSecond() {
-        return energyPerSecond;
+    public int getEnergyPerTick() {
+        return energyPerTick;
     }
 
-    public float getTickInterval() {
-        return tickInterval;
+    public int transferToTouchingStorage(int amount) {
+        // Placeholder for future implementation
+        return 0;
     }
 
-    // TODO: REMOVE FUNCTIONS BELOW AND MOVE TO SYSTEM
-    //
-    //
-    // TODO: REMOVE FUNCTIONS BELOW AND MOVE TO SYSTEM
+    public void onComponentTicked(float dt) {
+        // This block ticked!!!!
+        //
+        // Might be useful for future logic
+    }
 
     /**
      * Insert energy.
@@ -82,7 +86,7 @@ public class EnergyComponent implements Component<ChunkStore> {
      */
     public synchronized int insert(int amount) {
         if (amount <= 0) return 0;
-        int space = capacity - energy;
+        int space = (int) (this.getCapacity() - this.getEnergy());
         int inserted = Math.min(space, amount);
         this.energy += inserted;
         return inserted;
@@ -105,5 +109,21 @@ public class EnergyComponent implements Component<ChunkStore> {
         if (value < 0) value = 0;
         if (value > capacity) value = capacity;
         this.energy = value;
+    }
+
+    public static ComponentType<ChunkStore, EnergyComponent> getComponentType() {
+        return Hytech.get().getEnergyComponentType();
+    }
+
+    // Finds saved component info
+    @Nullable
+    @Override
+    public Component<ChunkStore> clone() {
+        EnergyComponent clone = new EnergyComponent();
+        clone.type = this.type;
+        clone.energy = this.energy;
+        clone.capacity = this.capacity;
+        clone.energyPerTick = this.energyPerTick;
+        return clone;
     }
 }

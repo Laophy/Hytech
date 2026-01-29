@@ -44,7 +44,16 @@
       "Use": "ConfigureSolar"
     },
     "CustomModel": "Blocks/Hytech_Capacitor_Block.blockymodel",
-    "VariantRotation": "NESW"
+    "VariantRotation": "NESW",
+    "BlockEntity": {
+      "Components": {
+        "EnergySystem": {
+          "Energy": 0,
+          "Capacity": 50000,
+          "EnergyPerTick": 0
+        }
+      }
+    }
   },
   "Tags": {
     "Type": [

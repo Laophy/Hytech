@@ -41,8 +41,7 @@
       }
     ],
     "Interactions": {
-      "Use": "ConfigureSolar",
-      "Primary": "ConfigureSolar"
+      "Use": "ConfigureSolar"
     },
     "CustomModel": "Blocks/Hytech_Capacitor_Block.blockymodel",
     "VariantRotation": "NESW"

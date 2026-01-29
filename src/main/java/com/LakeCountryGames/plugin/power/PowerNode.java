@@ -1,7 +1,6 @@
 package com.LakeCountryGames.plugin.power;
 
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.protocol.BlockPosition;
 
 public class PowerNode {
     public enum Type { SOLAR, WIRE, CAPACITOR, OTHER }
@@ -10,6 +9,7 @@ public class PowerNode {
     private final Type type;
     private final EnergyStorage storage;
 
+    // TODO: Change energy unit sometime?
     // accumulator for fractional generation (units are energy units)
     private double generationAccumulator = 0.0;
 

@@ -1,9 +1,8 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Hytech_Solar_Block.name"
+    "Name": "server.items.Hytech_Wire_Corner.name"
   },
   "ItemLevel": 600,
-  "Icon": "Icons/ItemsGenerated/Hytech_Solar_Block.png",
   "Categories": [
     "Blocks.Soils"
   ],
@@ -13,9 +12,6 @@
     "Material": "Solid",
     "DrawType": "Model",
     "Group": "Dirt",
-    "Flags": {
-      "IsUsable": true
-    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Soils"
@@ -24,7 +20,7 @@
     "BlockParticleSetId": "Sand",
     "Textures": [
       {
-        "All": "BlockTextures/Hytech_Solar_Block.png",
+        "All": "BlockTextures/Hytech_Wire_Corner.png",
         "Weight": 1
       }
     ],
@@ -38,18 +34,11 @@
     ],
     "CustomModelTexture": [
       {
-        "Texture": "BlockTextures/Hytech_Solar_Block.png"
+        "Texture": "BlockTextures/Hytech_Wire_Corner.png"
       }
     ],
-    "CustomModel": "Blocks/Tech_Solar_Block.blockymodel",
-    "Interactions": {
-      "Use": "ConfigureSolar"
-    },
-    "BlockEntity": {
-      "Components": {
-        "EnergySystem": {}
-      }
-    }
+    "CustomModel": "Blocks/Hytech_Wire_Corner.blockymodel",
+    "VariantRotation": "NESW"
   },
   "Tags": {
     "Type": [
@@ -58,15 +47,16 @@
   },
   "ItemSoundSetId": "ISS_Blocks_Soft",
   "IconProperties": {
-    "Scale": 0.58823,
+    "Scale": 1,
     "Rotation": [
       22.5,
       45,
       22.5
     ],
     "Translation": [
-      0,
-      -13.5
+      5,
+      -4
     ]
-  }
+  },
+  "Icon": "Icons/ItemsGenerated/Hytech_Wire_Corner.png"
 }

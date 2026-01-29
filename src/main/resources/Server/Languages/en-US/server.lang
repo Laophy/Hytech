@@ -1,6 +1,8 @@
 items.Example_Block.name=Example Block
 
 items.Hytech_Solar_Block.name=Solar Panel
-items.Hytech_Solar_Block.interactionHints.solar=Check Stats
+
+items.Hytech_Wire_Straight.name=Straight Wire
+items.Hytech_Wire_Corner.name=Corner Wire
 
 items.Hytech_Capacitor_Block.name=Capacitor

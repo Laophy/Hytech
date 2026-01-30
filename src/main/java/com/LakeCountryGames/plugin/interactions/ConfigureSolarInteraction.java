@@ -63,6 +63,10 @@ public class ConfigureSolarInteraction extends SimpleInteraction {
             if(energyComponent != null) {
                 player.sendMessage(Message.raw("Current energy: " + energyComponent.getEnergy()));
                 player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()));
+
+                player.sendMessage(Message.raw("Total Touching Generator: " + energyComponent.getConnectedGeneratorCount()));
+                player.sendMessage(Message.raw("Total Touching Generator Power To transfer: " + energyComponent.getConnectedTotalEnergyPerTick()));
+                player.sendMessage(Message.raw("Total Touching Generator Energy: " + energyComponent.getConnectedTotalEnergy()));
             } else {
                 player.sendMessage(Message.raw("This block does NOT have an Energy Component!"));
             }

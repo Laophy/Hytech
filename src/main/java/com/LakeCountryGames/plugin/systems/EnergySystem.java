@@ -15,6 +15,10 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import javax.annotation.Nonnull;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * EnergySystem (Extending the EntityTickingSystem)-> Handles logic for blocks that can store/generate/transmit energy.
@@ -36,6 +40,7 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         energy.onComponentTicked(dt); // Tick our energy component
 
         onHandleEnergyGeneration(dt, energy); // Tick the energy generation logic
+        updateConnectedGeneratorsForComponent(index, archetypeChunk, commandBuffer); // Update connected generators
         onHandleTransferEnergy(dt, index, archetypeChunk, store, commandBuffer); // Tick the energy transfer logic
     }
 
@@ -64,23 +69,23 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         assert blocks != null;
 
         // The block that looks for neighbors (your self)
-        EnergyComponent energy = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
+        EnergyComponent generatorComponent = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
 
         // Search neighboring blocks for EnergyComponents to transfer energy to/from
         // If im a generator block ill look for touching storage blocks to push energy to
-        if(energy.getType() == EnergyComponent.Type.GENERATOR) {
+        if(generatorComponent.getType() == EnergyComponent.Type.GENERATOR) {
             BlockModule.BlockStateInfo stateInfo = (BlockModule.BlockStateInfo) archetypeChunk.getComponent(index, BlockModule.BlockStateInfo.getComponentType());
             WorldChunk wc = (WorldChunk) commandBuffer.getComponent(stateInfo.getChunkRef(), WorldChunk.getComponentType());
 
-            int i = stateInfo.getIndex();
-            int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
-            int y = ChunkUtil.yFromBlockInColumn(i);
-            int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
-
-            Vector3i startingBlockPositionToScan = new Vector3i(x, y, z);
+//            int i = stateInfo.getIndex();
+//            int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
+//            int y = ChunkUtil.yFromBlockInColumn(i);
+//            int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
+//
+//            Vector3i startingBlockPositionToScan = new Vector3i(x, y, z);
 
             // TODO: Function that will take the startingBlock and check all 6 sides for EnergyComponents
-            scanAdjacentForStorage(energy, startingBlockPositionToScan, wc.getWorld(), wc, commandBuffer);
+            scanAdjacentForStorage(generatorComponent, wc.getWorld(), wc, commandBuffer);
 
             //LOGGER.atInfo().log("Checking for a touching storage (im a generator).... (" + energy.getEnergy() + " energy)");
             return false;
@@ -89,9 +94,9 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         return true;
     }
 
-    private void scanAdjacentForStorage(@Nonnull EnergyComponent energy, @Nonnull Vector3i start, @Nonnull World world, @Nonnull WorldChunk wc, @Nonnull CommandBuffer commandBuffer) {
+    private void scanAdjacentForStorage(@Nonnull EnergyComponent generatorComponent, @Nonnull World world, @Nonnull WorldChunk wc, @Nonnull CommandBuffer commandBuffer) {
         for (Vector3i dir : Vector3i.BLOCK_SIDES) {
-            Vector3i neighbor = start.clone().add(dir);
+            Vector3i neighbor = generatorComponent.getBlockPosition3d().clone().add(dir);
 
             // Resolve the block component holder at the neighbor position from the world
             Holder<ChunkStore> holder = world.getBlockComponentHolder(neighbor.getX(), neighbor.getY(), neighbor.getZ());
@@ -99,23 +104,118 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
                 continue;
             }
 
-            // Try to fetch an EnergyComponent from the holder
+            // Prefer any pending update in the command buffer so multiple generators accumulate correctly
+            EnergyComponent touchingStorageComponent = (EnergyComponent) commandBuffer.getComponent(
+                    wc.getBlockComponentEntity(neighbor.x, neighbor.y, neighbor.z),
+                    Hytech.get().getEnergyComponentType()
+            );
 
-            EnergyComponent neighborEnergy = holder.getComponent(Hytech.get().getEnergyComponentType());
-            if (neighborEnergy != null && neighborEnergy.getType() == EnergyComponent.Type.STORAGE) {
-                BlockPosition bp = new BlockPosition(neighbor.getX(), neighbor.getY(), neighbor.getZ());
-                LOGGER.atInfo().log("Touching storage found at " + bp + " (energy=" + neighborEnergy.getEnergy() + ")");
+//            if (touchingStorageComponent == null) {
+//                touchingStorageComponent = holder.getComponent(Hytech.get().getEnergyComponentType());
+//            }
 
-                // TODO: JUST A TEST TRANSFER FOR NOW
-                // Transfer 1 energy unit from generator to storage if possible
+            if (touchingStorageComponent != null && touchingStorageComponent.getType() == EnergyComponent.Type.STORAGE) {
+                float transferable = Math.min(
+                        generatorComponent.getStorageRate(), // rate at which energy can be transferred default 0.5
+                        Math.min(
+                                generatorComponent.getEnergy(), // how much STORED energy we have to give
+                                Math.max(0f, touchingStorageComponent.getCapacity() - touchingStorageComponent.getEnergy())
+                        )
+                );
 
-                // TODO: Do i need to call these updates via different thread?
+                if (transferable > 0) {
+                    touchingStorageComponent.insert(transferable); // Insert into neighbor storage
+                    generatorComponent.extract(transferable); // Extract from self generator
 
-                //.atInfo().log("Transferring 100 energy to storage");
-                energy.extract(5); // THIS WORKS!!
-                neighborEnergy.setEnergy(500); // THIS DOESNT SAVE? OR UPDATE
+                    commandBuffer.putComponent(
+                            wc.getBlockComponentEntity(neighbor.x, neighbor.y, neighbor.z),
+                            Hytech.get().getEnergyComponentType(),
+                            touchingStorageComponent
+                    );
+                }
             }
         }
+    }
+
+    private void updateConnectedGeneratorsForComponent(int index,
+                                                       @Nonnull ArchetypeChunk archetypeChunk,
+                                                       @Nonnull CommandBuffer commandBuffer) {
+        EnergyComponent energy = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
+        if (energy == null) return;
+        if (energy.getType() != EnergyComponent.Type.GENERATOR) return;
+
+        BlockModule.BlockStateInfo stateInfo = (BlockModule.BlockStateInfo) archetypeChunk.getComponent(index, BlockModule.BlockStateInfo.getComponentType());
+        if (stateInfo == null) return;
+
+        WorldChunk wc = (WorldChunk) commandBuffer.getComponent(stateInfo.getChunkRef(), WorldChunk.getComponentType());
+        if (wc == null) return;
+
+        int i = stateInfo.getIndex();
+        int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
+        int y = ChunkUtil.yFromBlockInColumn(i);
+        int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
+        Vector3i start = new Vector3i(x, y, z);
+
+        World world = wc.getWorld();
+
+        // gather connected generator positions (including start if applicable)
+        Set<Vector3i> connected = gatherConnectedGenerators(start, world);
+
+        // update component with positions
+        energy.setConnectedGenerators(connected);
+
+        // provide a lookup to update cached aggregates
+        energy.updateConnectedAggregates(pos -> {
+            Holder<ChunkStore> h = world.getBlockComponentHolder(pos.x, pos.y, pos.z);
+            if (h == null) return null;
+            return h.getComponent(Hytech.get().getEnergyComponentType());
+        });
+
+        // persist the updated component so later systems / commands see it
+        commandBuffer.putComponent(
+                wc.getBlockComponentEntity(start.x, start.y, start.z),
+                Hytech.get().getEnergyComponentType(),
+                energy
+        );
+    }
+
+    /**
+     * BFS over adjacent blocks to collect all connected generator block positions.
+     * Only traverses blocks that have an EnergyComponent with Type.GENERATOR.
+     */
+    private Set<Vector3i> gatherConnectedGenerators(@Nonnull Vector3i start, @Nonnull World world) {
+        Set<Vector3i> visited = new HashSet<>();
+        Deque<Vector3i> q = new ArrayDeque<>();
+
+        // quick check: start must be a generator
+        Holder<ChunkStore> startHolder = world.getBlockComponentHolder(start.x, start.y, start.z);
+        if (startHolder == null) return visited;
+        EnergyComponent startEc = startHolder.getComponent(Hytech.get().getEnergyComponentType());
+        if (startEc == null || startEc.getType() != EnergyComponent.Type.GENERATOR) return visited;
+
+        visited.add(start);
+        q.add(start);
+
+        while (!q.isEmpty()) {
+            Vector3i cur = q.removeFirst();
+
+            // iterate 6 neighbours
+            for (Vector3i dir : Vector3i.BLOCK_SIDES) {
+                Vector3i nb = cur.clone().add(dir);
+                if (visited.contains(nb)) continue;
+
+                Holder<ChunkStore> holder = world.getBlockComponentHolder(nb.x, nb.y, nb.z);
+                if (holder == null) continue;
+
+                EnergyComponent nbEc = holder.getComponent(Hytech.get().getEnergyComponentType());
+                if (nbEc != null && nbEc.getType() == EnergyComponent.Type.GENERATOR) {
+                    visited.add(nb);
+                    q.addLast(nb);
+                }
+            }
+        }
+
+        return visited;
     }
 
     @Nonnull

@@ -1,0 +1,495 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Hytech_Wire.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Wire.png",
+  "Categories": [
+    "Blocks.Deco"
+  ],
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "Set": "Wood_Softwood_Planks",
+  "BlockType": {
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Wire/Wire.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "BlockTextures/Wire/Wire_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "Group": "Wood",
+    "VariantRotation": "NESW",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "SoftBlocks"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "Material": "Solid",
+    "HitboxType": "Wire",
+    "State": {
+      "Definitions": {
+        "Corner_Left": {
+          "CustomModel": "Blocks/Wire/Wire_Corner_Left.blockymodel",
+          "Support": {
+            "West": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownWest": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "South": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownSouth": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "Down": [
+              {
+                "FaceType": "Full"
+              }
+            ]
+          },
+          "Supporting": {
+            "West": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "South": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownWest": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownSouth": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          },
+          "FlipType": "Orthogonal",
+          "Wire": {
+            "Points": [
+              {
+                "Point": {
+                  "X": 0,
+                  "Y": 0.1,
+                  "Z": 0.5
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.3,
+                  "Y": 0.1,
+                  "Z": 0.5
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.5,
+                  "Y": 0.1,
+                  "Z": 0.7
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.5,
+                  "Y": 0.1,
+                  "Z": 1
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              }
+            ]
+          }
+        },
+        "Corner_Right": {
+          "CustomModel": "Blocks/Wire/Wire_Corner_Right.blockymodel",
+          "Support": {
+            "East": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownEast": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "South": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownSouth": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "Down": [
+              {
+                "FaceType": "Full"
+              }
+            ]
+          },
+          "Supporting": {
+            "East": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "South": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownEast": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownSouth": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          },
+          "FlipType": "Orthogonal",
+          "Wire": {
+            "Points": [
+              {
+                "Point": {
+                  "X": 1.0,
+                  "Y": 0.1,
+                  "Z": 0.5
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.7,
+                  "Y": 0.1,
+                  "Z": 0.5
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.5,
+                  "Y": 0.1,
+                  "Z": 0.7
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.5,
+                  "Y": 0.1,
+                  "Z": 1
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 0
+                }
+              }
+            ]
+          }
+        },
+        "Slope": {
+          "Support": {
+            "UpNorth": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "South": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownSouth": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "Down": [
+              {
+                "FaceType": "Full"
+              }
+            ]
+          },
+          "Supporting": {
+            "UpNorth": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "South": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownSouth": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          },
+          "Wire": {
+            "Points": [
+              {
+                "Point": {
+                  "X": 0.5,
+                  "Y": 1.1,
+                  "Z": 0
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 1
+                }
+              },
+              {
+                "Point": {
+                  "X": 0.5,
+                  "Y": 0.1,
+                  "Z": 1
+                },
+                "Normal": {
+                  "X": 0,
+                  "Y": 1,
+                  "Z": 1
+                }
+              }
+            ]
+          },
+          "HitboxType": "Stairs",
+          "CustomModel": "Blocks/Wire/Wire_Slope.blockymodel"
+        },
+        "Cross": {
+          "Support": {
+            "Down": [
+              {
+                "FaceType": "Full"
+              }
+            ],
+            "CardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownCardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          },
+          "Supporting": {
+            "CardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownCardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          },
+          "CustomModel": "Blocks/Wire/Wire_Cross.blockymodel"
+        },
+        "T": {
+          "CustomModel": "Blocks/Wire/Wire_T.blockymodel",
+          "Support": {
+            "Down": [
+              {
+                "FaceType": "Full"
+              }
+            ],
+            "CardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownCardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          },
+          "Supporting": {
+            "CardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ],
+            "DownCardinalDirections": [
+              {
+                "FaceType": "Wire"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "North": [
+        {
+          "FaceType": "Wire"
+        }
+      ],
+      "DownNorth": [
+        {
+          "FaceType": "Wire"
+        }
+      ],
+      "South": [
+        {
+          "FaceType": "Wire"
+        }
+      ],
+      "DownSouth": [
+        {
+          "FaceType": "Wire"
+        }
+      ]
+    },
+    "Supporting": {
+      "North": [
+        {
+          "FaceType": "Wire"
+        }
+      ],
+      "DownNorth": [
+        {
+          "FaceType": "Wire"
+        }
+      ],
+      "South": [
+        {
+          "FaceType": "Wire"
+        }
+      ],
+      "DownSouth": [
+        {
+          "FaceType": "Wire"
+        }
+      ]
+    },
+    "ParticleColor": "#828282",
+    "BlockSoundSetId": "Metal",
+    "Wire": {
+      "Points": [
+        {
+          "Point": {
+            "X": 0.5,
+            "Y": 0.1,
+            "Z": 0
+          },
+          "Normal": {
+            "X": 0,
+            "Y": 1,
+            "Z": 0
+          }
+        },
+        {
+          "Point": {
+            "X": 0.5,
+            "Y": 0.1,
+            "Z": 1
+          },
+          "Normal": {
+            "X": 0,
+            "Y": 1,
+            "Z": 0
+          }
+        }
+      ]
+    },
+    "ConnectedBlockRuleSet": {
+      "Type": "CustomTemplate",
+      "TemplateShapeAssetId": "WireConnectedBlockTemplate",
+      "TemplateShapeBlockPatterns": {
+        "Straight": "Wire",
+        "Corner_Left": "*Wire_State_Definitions_Corner_Left",
+        "Corner_Right": "*Wire_State_Definitions_Corner_Right",
+        "Slope": "*Wire_State_Definitions_Slope",
+        "TShape": "*Wire_State_Definitions_T",
+        "Cross": "*Wire_State_Definitions_Cross"
+      }
+    }
+  },
+  "PlayerAnimationsId": "Item",
+  "IconProperties": {
+    "Scale": 0.765,
+    "Translation": [
+      0,
+      -1.7
+    ],
+    "Rotation": [
+      90,
+      0,
+      0
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Wire"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

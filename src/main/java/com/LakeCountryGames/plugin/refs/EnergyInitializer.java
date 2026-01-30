@@ -6,7 +6,10 @@ import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,8 +30,17 @@ public class EnergyInitializer extends RefSystem<ChunkStore> {
             //player.sendMessage(Message.raw("is energy???"));
             LOGGER.atInfo().log("Entity was added to the world! ");
 
-            // TODO: do we use putComponent here?
+            // Init any component things we need
+            WorldChunk wc = (WorldChunk) commandBuffer.getComponent(info.getChunkRef(), WorldChunk.getComponentType());
 
+            int i = info.getIndex();
+            int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
+            int y = ChunkUtil.yFromBlockInColumn(i);
+            int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
+
+            // Helper to save block location
+            Vector3i blockPos = new Vector3i(x, y, z);
+            energy.setBlockPosition3d(blockPos);
         }
     }
 

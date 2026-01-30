@@ -50,7 +50,7 @@
         "EnergySystem": {
             "Type": "GENERATOR",
             "Energy": 0,
-            "Capacity": 5000,
+            "Capacity": 200,
             "EnergyPerTick": 1
         }
       }

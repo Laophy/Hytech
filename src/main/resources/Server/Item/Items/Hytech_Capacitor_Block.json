@@ -48,7 +48,6 @@
     "BlockEntity": {
       "Components": {
         "EnergySystem": {
-          "Energy": 0,
           "Capacity": 50000,
           "EnergyPerTick": 0
         }

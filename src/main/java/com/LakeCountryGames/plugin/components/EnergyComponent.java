@@ -7,6 +7,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import javax.annotation.Nullable;
 
@@ -16,6 +17,8 @@ import javax.annotation.Nullable;
  * Data Component, not a logical class
  */
 public class EnergyComponent implements Component<ChunkStore> {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
     // CODEC will map the json data that was saved
     // you must ensure the clone method is being used and not set to a new class.
     public static final BuilderCodec<EnergyComponent> CODEC = BuilderCodec.builder(
@@ -89,6 +92,8 @@ public class EnergyComponent implements Component<ChunkStore> {
         int space = (int) (this.getCapacity() - this.getEnergy());
         int inserted = Math.min(space, amount);
         this.energy += inserted;
+
+
         return inserted;
     }
 

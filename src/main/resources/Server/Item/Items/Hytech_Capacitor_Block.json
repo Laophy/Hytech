@@ -47,7 +47,7 @@
     "VariantRotation": "NESW",
     "BlockEntity": {
       "Components": {
-        "EnergySystem": {
+        "EnergyComponent": {
           "Energy": 0,
           "Capacity": 50000,
           "EnergyPerTick": 0

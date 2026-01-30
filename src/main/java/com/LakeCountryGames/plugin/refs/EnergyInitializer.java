@@ -24,11 +24,12 @@ public class EnergyInitializer extends RefSystem<ChunkStore> {
 
         BlockModule.BlockStateInfo info = (BlockModule.BlockStateInfo) commandBuffer.getComponent(ref, BlockModule.BlockStateInfo.getComponentType());
         if (info == null) return;
+
         EnergyComponent energy = (EnergyComponent) commandBuffer.getComponent(ref, Hytech.get().getEnergyComponentType());
         if (energy != null) {
             // We found the block being added?
             //player.sendMessage(Message.raw("is energy???"));
-            LOGGER.atInfo().log("Entity was added to the world! ");
+            LOGGER.atInfo().log(energy.getType() + " was added from the world!");
 
             // Init any component things we need
             WorldChunk wc = (WorldChunk) commandBuffer.getComponent(info.getChunkRef(), WorldChunk.getComponentType());
@@ -51,12 +52,12 @@ public class EnergyInitializer extends RefSystem<ChunkStore> {
         EnergyComponent energy = (EnergyComponent) commandBuffer.getComponent(ref, Hytech.get().getEnergyComponentType());
         if (energy != null) {
             // We found the block being added?
-            LOGGER.atInfo().log("Entity was removed from the world.... ");
+            LOGGER.atInfo().log(energy.getType() + " was removed from the world!");
         }
     }
 
     @Override
-    public Query getQuery() {
+    public Query<ChunkStore> getQuery() {
         return Query.and(BlockModule.BlockStateInfo.getComponentType(), Hytech.get().getEnergyComponentType());
     }
 }

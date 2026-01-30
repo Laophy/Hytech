@@ -8,7 +8,8 @@
   ],
   "Interactions": {
     "Primary": "Block_Primary",
-    "Secondary": "Block_Secondary"
+    "Secondary": "Block_Secondary",
+    "Use": "ConfigureSolar"
   },
   "Set": "Wood_Softwood_Planks",
   "BlockType": {
@@ -23,7 +24,19 @@
     ],
     "Group": "Wood",
     "VariantRotation": "NESW",
-    "Flags": {},
+    "Flags": {
+      "IsUsable": true
+    },
+    "BlockEntity": {
+      "Components": {
+        "EnergyComponent": {
+          "Type": "TRANSFER",
+          "Energy": 0,
+          "Capacity": 0,
+          "EnergyPerTick": 0
+        }
+      }
+    },
     "Gathering": {
       "Breaking": {
         "GatherType": "SoftBlocks"

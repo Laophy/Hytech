@@ -37,43 +37,63 @@ public class ConfigureSolarInteraction extends SimpleInteraction {
 
         // Player store
         Player player = store.getComponent(owningEntity, Player.getComponentType());
-        if(player == null) return;
+        if(player == null) {
+            player.sendMessage(Message.raw("LOST A REF???! - player").color("#FF0000").bold(true));
+            return;
+        }
 
         // World of the player
         World world = player.getWorld();
-        if(world == null) return;
+        if(world == null) {
+            player.sendMessage(Message.raw("LOST A REF???! - world").color("#FF0000").bold(true));
+            return;
+        }
 
         // Get the block data we interacted with
         BlockPosition targetBlock = context.getTargetBlock();
-        assert targetBlock != null;
+        if(targetBlock == null) {
+            player.sendMessage(Message.raw("LOST A REF???! - targetBlock").color("#FF0000").bold(true));
+            return;
+        }
         Vector3i targetVec = new Vector3i(targetBlock.x, targetBlock.y, targetBlock.z);
 
         if(type == InteractionType.Use) {
             // Get energyComponent from the chunkStore
             WorldChunk worldChunk = world.getChunk(ChunkUtil.indexChunkFromBlock(targetVec.x, targetVec.z));
-            assert worldChunk != null;
+            if(worldChunk == null) {
+                player.sendMessage(Message.raw("LOST A REF???! - worldChunk").color("#FF0000").bold(true));
+                return;
+            }
 
             Ref<ChunkStore> componentRef = worldChunk.getBlockComponentEntity(targetVec.x, targetVec.y, targetVec.z);
-            assert componentRef != null;
+            if(componentRef == null) {
+                player.sendMessage(Message.raw("LOST A REF???! - componentRef").color("#FF0000").bold(true));
+                return;
+            }
 
             // Get EnergyComponent from/with chunkstore ref
             EnergyComponent energyComponent = world.getChunkStore().getStore().getComponent(componentRef, Hytech.get().getEnergyComponentType());
 
-            // Does the interacted block have energy?
-            if(energyComponent != null) {
-                player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
-
-                player.sendMessage(Message.raw("Current energy: " + energyComponent.getEnergy()));
-                player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()));
-
-                player.sendMessage(Message.raw("Total Touching Generator: " + energyComponent.getConnectedGeneratorCount()));
-                player.sendMessage(Message.raw("Total Touching Generator Power To transfer: " + energyComponent.getConnectedTotalEnergyPerTick()));
-                player.sendMessage(Message.raw("Total Touching Generator Energy: " + energyComponent.getConnectedTotalEnergy()));
-
-                player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
+            if (energyComponent != null) {
+                if(energyComponent.getType() == EnergyComponent.Type.TRANSFER){
+                    player.sendMessage(Message.raw("This is a transfer wire!").color("#FF0000").bold(true));
+                    return;
+                }
             } else {
-                player.sendMessage(Message.raw("This block does NOT have an Energy Component!"));
+                player.sendMessage(Message.raw("energyComponent was NULL!?!?!?!?!?").color("#FF0000").bold(false));
+                return;
             }
+
+            player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
+
+            player.sendMessage(Message.raw("Current energy: " + energyComponent.getEnergy()));
+            player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()));
+
+            player.sendMessage(Message.raw("Total Touching Generator: " + energyComponent.getConnectedGeneratorCount()));
+            player.sendMessage(Message.raw("Total Touching Generator Power To transfer: " + energyComponent.getConnectedTotalEnergyPerTick()));
+            player.sendMessage(Message.raw("Total Touching Generator Energy: " + energyComponent.getConnectedTotalEnergy()));
+
+            player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
         }
     }
 }

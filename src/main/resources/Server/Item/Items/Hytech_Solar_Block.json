@@ -47,7 +47,7 @@
     },
     "BlockEntity": {
       "Components": {
-        "EnergySystem": {
+        "EnergyComponent": {
             "Type": "GENERATOR",
             "Energy": 0,
             "Capacity": 200,

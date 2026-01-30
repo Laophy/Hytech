@@ -32,7 +32,7 @@ public class Hytech extends JavaPlugin {
         this.getCodecRegistry(Interaction.CODEC)
                 .register("ConfigureSolar", ConfigureSolarInteraction.class, ConfigureSolarInteraction.CODEC);
 
-        this.energyComponentType = this.getChunkStoreRegistry().registerComponent(EnergyComponent.class, "EnergySystem", EnergyComponent.CODEC);
+        this.energyComponentType = this.getChunkStoreRegistry().registerComponent(EnergyComponent.class, "EnergyComponent", EnergyComponent.CODEC);
     }
 
     @Override

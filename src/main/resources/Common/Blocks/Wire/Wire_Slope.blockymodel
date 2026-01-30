@@ -3,82 +3,6 @@
     {
       "id": "1",
       "name": "Rail",
-      "position": {"x": -9, "y": 18.74631, "z": -0.54531},
-      "orientation": {"x": 0.38268, "y": 0, "z": 0, "w": 0.92388},
-      "shape": {
-        "type": "none",
-        "offset": {"x": 0, "y": 0, "z": 0},
-        "stretch": {"x": 0, "y": 0, "z": 0},
-        "settings": {
-          "isPiece": false
-        },
-        "textureLayout": {},
-        "unwrapMode": "custom",
-        "visible": true,
-        "doubleSided": false,
-        "shadingMode": "flat"
-      }
-    },
-    {
-      "id": "2",
-      "name": "Plank",
-      "position": {"x": 0.77991, "y": 14.31552, "z": 3.05174},
-      "orientation": {"x": 0.38258, "y": 0.02112, "z": 0.00875, "w": 0.92364},
-      "shape": {
-        "type": "none",
-        "offset": {"x": 0, "y": 0, "z": 0},
-        "stretch": {"x": 0, "y": 0, "z": 0},
-        "settings": {
-          "isPiece": false
-        },
-        "textureLayout": {},
-        "unwrapMode": "custom",
-        "visible": true,
-        "doubleSided": false,
-        "shadingMode": "flat"
-      }
-    },
-    {
-      "id": "3",
-      "name": "Plank",
-      "position": {"x": -0.15849, "y": 5.19443, "z": 12.17284},
-      "orientation": {"x": 0.38266, "y": -0.00938, "z": -0.00389, "w": 0.92383},
-      "shape": {
-        "type": "none",
-        "offset": {"x": 0, "y": 0, "z": 0},
-        "stretch": {"x": 0, "y": 0, "z": 0},
-        "settings": {
-          "isPiece": false
-        },
-        "textureLayout": {},
-        "unwrapMode": "custom",
-        "visible": true,
-        "doubleSided": false,
-        "shadingMode": "flat"
-      }
-    },
-    {
-      "id": "4",
-      "name": "Plank",
-      "position": {"x": 0.52789, "y": 29.09697, "z": -11.7297},
-      "orientation": {"x": 0.38266, "y": -0.00938, "z": -0.00389, "w": 0.92383},
-      "shape": {
-        "type": "none",
-        "offset": {"x": 0, "y": 0, "z": 0},
-        "stretch": {"x": 0, "y": 0, "z": 0},
-        "settings": {
-          "isPiece": false
-        },
-        "textureLayout": {},
-        "unwrapMode": "custom",
-        "visible": true,
-        "doubleSided": false,
-        "shadingMode": "flat"
-      }
-    },
-    {
-      "id": "5",
-      "name": "Rail",
       "position": {"x": 9, "y": 18.89029, "z": -0.68929},
       "orientation": {"x": 0.38268, "y": 0, "z": 0, "w": 0.92388},
       "shape": {
@@ -125,25 +49,6 @@
         "visible": true,
         "doubleSided": false,
         "shadingMode": "standard"
-      }
-    },
-    {
-      "id": "6",
-      "name": "Plank",
-      "position": {"x": 0.28788, "y": 6.44809, "z": 10.91918},
-      "orientation": {"x": 0.38258, "y": 0.02112, "z": 0.00875, "w": 0.92364},
-      "shape": {
-        "type": "none",
-        "offset": {"x": 0, "y": 0, "z": 0},
-        "stretch": {"x": 0, "y": 0, "z": 0},
-        "settings": {
-          "isPiece": false
-        },
-        "textureLayout": {},
-        "unwrapMode": "custom",
-        "visible": true,
-        "doubleSided": false,
-        "shadingMode": "flat"
       }
     }
   ],

@@ -2,7 +2,7 @@
   "TranslationProperties": {
     "Name": "server.items.Hytech_Wire.name"
   },
-  "Icon": "Icons/ItemsGenerated/Wire.png",
+  "Icon": "Icons/ItemsGenerated/Hytech_Wire_Straight.png",
   "Categories": [
     "Blocks.Deco"
   ],
@@ -39,22 +39,22 @@
           "Support": {
             "West": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownWest": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "South": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownSouth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "Down": [
@@ -66,27 +66,27 @@
           "Supporting": {
             "West": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "South": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownWest": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownSouth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           },
           "FlipType": "Orthogonal",
-          "Wire": {
+          "Hytech_Wire": {
             "Points": [
               {
                 "Point": {
@@ -144,22 +144,22 @@
           "Support": {
             "East": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownEast": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "South": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownSouth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "Down": [
@@ -171,27 +171,27 @@
           "Supporting": {
             "East": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "South": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownEast": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownSouth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           },
           "FlipType": "Orthogonal",
-          "Wire": {
+          "Hytech_Wire": {
             "Points": [
               {
                 "Point": {
@@ -248,17 +248,17 @@
           "Support": {
             "UpNorth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "South": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownSouth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "Down": [
@@ -270,21 +270,21 @@
           "Supporting": {
             "UpNorth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "South": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownSouth": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           },
-          "Wire": {
+          "Hytech_Wire": {
             "Points": [
               {
                 "Point": {
@@ -324,24 +324,24 @@
             ],
             "CardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownCardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           },
           "Supporting": {
             "CardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownCardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           },
@@ -357,24 +357,24 @@
             ],
             "CardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownCardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           },
           "Supporting": {
             "CardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ],
             "DownCardinalDirections": [
               {
-                "FaceType": "Wire"
+                "FaceType": "Hytech_Wire"
               }
             ]
           }
@@ -389,50 +389,50 @@
       ],
       "North": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ],
       "DownNorth": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ],
       "South": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ],
       "DownSouth": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ]
     },
     "Supporting": {
       "North": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ],
       "DownNorth": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ],
       "South": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ],
       "DownSouth": [
         {
-          "FaceType": "Wire"
+          "FaceType": "Hytech_Wire"
         }
       ]
     },
     "ParticleColor": "#828282",
     "BlockSoundSetId": "Metal",
-    "Wire": {
+    "Hytech_Wire": {
       "Points": [
         {
           "Point": {
@@ -464,12 +464,12 @@
       "Type": "CustomTemplate",
       "TemplateShapeAssetId": "WireConnectedBlockTemplate",
       "TemplateShapeBlockPatterns": {
-        "Straight": "Wire",
-        "Corner_Left": "*Wire_State_Definitions_Corner_Left",
-        "Corner_Right": "*Wire_State_Definitions_Corner_Right",
-        "Slope": "*Wire_State_Definitions_Slope",
-        "TShape": "*Wire_State_Definitions_T",
-        "Cross": "*Wire_State_Definitions_Cross"
+        "Straight": "Hytech_Wire",
+        "Corner_Left": "*Hytech_Wire_State_Definitions_Corner_Left",
+        "Corner_Right": "*Hytech_Wire_State_Definitions_Corner_Right",
+        "Slope": "*Hytech_Wire_State_Definitions_Slope",
+        "TShape": "*Hytech_Wire_State_Definitions_T",
+        "Cross": "*Hytech_Wire_State_Definitions_Cross"
       }
     }
   },

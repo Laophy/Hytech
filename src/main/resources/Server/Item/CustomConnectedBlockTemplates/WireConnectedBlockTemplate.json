@@ -6,10 +6,10 @@
     "Straight": {
       "FaceTags": {
         "North": [
-          "RailConnection"
+          "WireConnection"
         ],
         "South": [
-          "RailConnection"
+          "WireConnection"
         ]
       },
       "PatternsToMatchAnyOf": [
@@ -28,7 +28,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -41,7 +41,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -54,7 +54,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -76,10 +76,10 @@
     "Corner_Left": {
       "FaceTags": {
         "West": [
-          "RailConnection"
+          "WireConnection"
         ],
         "South": [
-          "RailConnection"
+          "WireConnection"
         ]
       },
       "PatternsToMatchAnyOf": [
@@ -97,7 +97,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -110,7 +110,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -123,7 +123,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -136,7 +136,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -157,7 +157,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -170,7 +170,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -183,7 +183,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -196,7 +196,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -218,7 +218,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -231,7 +231,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -244,7 +244,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -265,7 +265,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -278,7 +278,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -291,7 +291,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -302,10 +302,10 @@
     "Corner_Right": {
       "FaceTags": {
         "East": [
-          "RailConnection"
+          "WireConnection"
         ],
         "South": [
-          "RailConnection"
+          "WireConnection"
         ]
       },
       "PatternsToMatchAnyOf": [
@@ -323,7 +323,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -336,7 +336,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -349,7 +349,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -362,7 +362,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -383,7 +383,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -396,7 +396,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -409,7 +409,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -422,7 +422,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -444,7 +444,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -457,7 +457,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -470,7 +470,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -491,7 +491,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -504,7 +504,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -517,7 +517,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -528,7 +528,7 @@
     "Slope": {
       "FaceTags": {
         "South": [
-          "RailConnection"
+          "WireConnection"
         ]
       },
       "PatternsToMatchAnyOf": [
@@ -548,7 +548,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -559,13 +559,13 @@
     "TShape": {
       "FaceTags": {
         "East": [
-          "RailConnection"
+          "WireConnection"
         ],
         "South": [
-          "RailConnection"
+          "WireConnection"
         ],
         "West": [
-          "RailConnection"
+          "WireConnection"
         ]
       },
       "PatternsToMatchAnyOf": [
@@ -584,7 +584,7 @@
               "IncludeOrExclude": "Exclude",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -597,7 +597,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -610,7 +610,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -623,7 +623,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }
@@ -634,16 +634,16 @@
     "Cross": {
       "FaceTags": {
         "North": [
-          "RailConnection"
+          "WireConnection"
         ],
         "East": [
-          "RailConnection"
+          "WireConnection"
         ],
         "South": [
-          "RailConnection"
+          "WireConnection"
         ],
         "West": [
-          "RailConnection"
+          "WireConnection"
         ]
       },
       "PatternsToMatchAnyOf": [
@@ -660,7 +660,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "South": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -673,7 +673,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "West": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -686,7 +686,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "North": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             },
@@ -699,7 +699,7 @@
               "IncludeOrExclude": "Include",
               "FaceTags": {
                 "East": [
-                  "RailConnection"
+                  "WireConnection"
                 ]
               }
             }

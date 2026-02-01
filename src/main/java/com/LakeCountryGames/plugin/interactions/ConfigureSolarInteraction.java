@@ -75,25 +75,30 @@ public class ConfigureSolarInteraction extends SimpleInteraction {
             EnergyComponent energyComponent = world.getChunkStore().getStore().getComponent(componentRef, Hytech.get().getEnergyComponentType());
 
             if (energyComponent != null) {
-                if(energyComponent.getType() == EnergyComponent.Type.TRANSFER){
-                    player.sendMessage(Message.raw("This is a transfer wire!").color("#FF0000").bold(true));
-                    return;
+                player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
+                if(energyComponent.getType() == EnergyComponent.Type.GENERATOR){
+                    // Only log if multi
+                    if (energyComponent.getConnectedTotalEnergyPerTick() > 1) {
+                        player.sendMessage(Message.raw("Type: Multi-" + energyComponent.getType().toString()).color("#D99527").bold(true));
+                        player.sendMessage(Message.raw("Total Touching Generator: " + energyComponent.getConnectedGeneratorCount()));
+                        player.sendMessage(Message.raw("Total Touching Generator Power To transfer: " + energyComponent.getConnectedTotalEnergyPerTick()));
+                        player.sendMessage(Message.raw("Total Touching Generator Energy: " + energyComponent.getConnectedTotalEnergy()));
+                    } else {
+                        player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()).color("#D99527").bold(true));
+                        player.sendMessage(Message.raw("Current energy: " + energyComponent.getEnergy() + " / " + energyComponent.getCapacity()));
+                    }
+
+                } else if (energyComponent.getType() == EnergyComponent.Type.STORAGE){
+                    player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()).color("#3687C2").bold(true));
+                    player.sendMessage(Message.raw("Current energy: " + energyComponent.getEnergy() + " / " + energyComponent.getCapacity()));
+                } else if (energyComponent.getType() == EnergyComponent.Type.TRANSFER){
+                    player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()).color("#575757").bold(true));
                 }
+                player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
             } else {
                 player.sendMessage(Message.raw("energyComponent was NULL!?!?!?!?!?").color("#FF0000").bold(false));
-                return;
             }
 
-            player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
-
-            player.sendMessage(Message.raw("Current energy: " + energyComponent.getEnergy()));
-            player.sendMessage(Message.raw("Type: " + energyComponent.getType().toString()));
-
-            player.sendMessage(Message.raw("Total Touching Generator: " + energyComponent.getConnectedGeneratorCount()));
-            player.sendMessage(Message.raw("Total Touching Generator Power To transfer: " + energyComponent.getConnectedTotalEnergyPerTick()));
-            player.sendMessage(Message.raw("Total Touching Generator Energy: " + energyComponent.getConnectedTotalEnergy()));
-
-            player.sendMessage(Message.raw("------------------------------------------").color("#FF0000").bold(true));
         }
     }
 }

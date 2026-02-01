@@ -14,10 +14,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import javax.annotation.Nonnull;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * EnergySystem (Extending the EntityTickingSystem)-> Handles logic for blocks that can store/generate/transmit energy.
@@ -59,7 +56,26 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         // Is a storage block touching a generator block (not checking for wires)
         checkForTouchingStorage(dt, index, archetypeChunk, store, commandBuffer);
 
-        // TODO: Check for wires until we reach a storage/generator block and transfer energy accordingly
+
+        // TODO: Review and update the wire transfer logic....
+        EnergyComponent energy = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
+        if (energy == null) return;
+
+        // Only generators actively push energy through networks
+        if (energy.getType() != EnergyComponent.Type.GENERATOR) return;
+
+        BlockModule.BlockStateInfo stateInfo = (BlockModule.BlockStateInfo) archetypeChunk.getComponent(index, BlockModule.BlockStateInfo.getComponentType());
+        if (stateInfo == null) return;
+        WorldChunk wc = (WorldChunk) commandBuffer.getComponent(stateInfo.getChunkRef(), WorldChunk.getComponentType());
+        if (wc == null) return;
+
+        int i = stateInfo.getIndex();
+        int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
+        int y = ChunkUtil.yFromBlockInColumn(i);
+        int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
+        Vector3i start = new Vector3i(x, y, z);
+
+        transferEnergyThroughNetwork(energy, start, wc.getWorld(), wc, commandBuffer);
     }
 
     // Returns true if touching storage found and energy transferred (or attempted)
@@ -215,6 +231,89 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         }
 
         return visited;
+    }
+
+    private void transferEnergyThroughNetwork(@Nonnull EnergyComponent generatorComponent,
+                                              @Nonnull Vector3i start,
+                                              @Nonnull World world,
+                                              @Nonnull WorldChunk wc,
+                                              @Nonnull CommandBuffer commandBuffer) {
+        // BFS to discover storages in distance order
+        Set<Vector3i> visited = new HashSet<>();
+        Deque<Vector3i> q = new ArrayDeque<>();
+        List<Vector3i> foundStorages = new ArrayList<>();
+
+        visited.add(start);
+        q.addLast(start);
+
+        while (!q.isEmpty()) {
+            Vector3i cur = q.removeFirst();
+
+            for (Vector3i dir : Vector3i.BLOCK_SIDES) {
+                Vector3i nb = cur.clone().add(dir);
+                if (visited.contains(nb)) continue;
+
+                Holder<ChunkStore> holder = world.getBlockComponentHolder(nb.x, nb.y, nb.z);
+                if (holder == null) continue;
+
+                EnergyComponent nbComp = holder.getComponent(Hytech.get().getEnergyComponentType());
+                if (nbComp == null) {
+                    visited.add(nb);
+                    continue;
+                }
+
+                // If it's a storage, record it as an endpoint (do not enqueue further from storage)
+                if (nbComp.getType() == EnergyComponent.Type.STORAGE) {
+                    visited.add(nb);
+                    foundStorages.add(nb);
+                    continue;
+                }
+
+                // Traverse through wires and other generators so networks are followed
+                if (nbComp.getType() == EnergyComponent.Type.TRANSFER || nbComp.getType() == EnergyComponent.Type.GENERATOR) {
+                    visited.add(nb);
+                    q.addLast(nb);
+                }
+            }
+        }
+
+        // Fill storages in BFS order closest first until generator energy is exhausted
+        for (Vector3i storagePos : foundStorages) {
+            if (generatorComponent.getEnergy() <= 0f) break;
+
+            EnergyComponent storageComp = (EnergyComponent) commandBuffer.getComponent(
+                    wc.getBlockComponentEntity(storagePos.x, storagePos.y, storagePos.z),
+                    Hytech.get().getEnergyComponentType()
+            );
+
+            if (storageComp == null) {
+                Holder<ChunkStore> h = world.getBlockComponentHolder(storagePos.x, storagePos.y, storagePos.z);
+                if (h == null) continue;
+                storageComp = h.getComponent(Hytech.get().getEnergyComponentType());
+                if (storageComp == null) continue;
+            }
+
+            float freeSpace = Math.max(0f, storageComp.getCapacity() - storageComp.getEnergy());
+            float transferable = Math.min(generatorComponent.getStorageRate(), Math.min(generatorComponent.getEnergy(), freeSpace));
+
+            if (transferable > 0f) {
+                storageComp.insert(transferable);
+                generatorComponent.extract(transferable);
+
+                commandBuffer.putComponent(
+                        wc.getBlockComponentEntity(storagePos.x, storagePos.y, storagePos.z),
+                        Hytech.get().getEnergyComponentType(),
+                        storageComp
+                );
+            }
+        }
+
+        // Persist generator changes as well
+        commandBuffer.putComponent(
+                wc.getBlockComponentEntity(start.x, start.y, start.z),
+                Hytech.get().getEnergyComponentType(),
+                generatorComponent
+        );
     }
 
     @Nonnull

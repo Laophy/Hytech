@@ -42,6 +42,8 @@ public class EnergyInitializer extends RefSystem<ChunkStore> {
             // Helper to save block location
             Vector3i blockPos = new Vector3i(x, y, z);
             energy.setBlockPosition3d(blockPos);
+        } else {
+            LOGGER.atInfo().log("SOMETHING NON ENERGY WAS REMOVED FROM THE WORLD!");
         }
     }
 
@@ -53,6 +55,8 @@ public class EnergyInitializer extends RefSystem<ChunkStore> {
         if (energy != null) {
             // We found the block being added?
             LOGGER.atInfo().log(energy.getType() + " was removed from the world!");
+        } else {
+            LOGGER.atInfo().log("SOMETHING NON ENERGY WAS REMOVED FROM THE WORLD!");
         }
     }
 

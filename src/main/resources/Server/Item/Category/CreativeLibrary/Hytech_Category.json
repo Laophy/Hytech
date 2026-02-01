@@ -1,0 +1,11 @@
+{
+  "Icon": "Icons/ItemCategories/Items-Tools.png",
+  "Order": 5,
+  "Children": [
+    {
+      "Id": "Components",
+      "Name": "server.ui.itemcategory.energy",
+      "Icon": "Icons/ItemCategories/Builder Tools.png"
+    }
+  ]
+}

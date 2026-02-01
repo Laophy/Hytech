@@ -171,7 +171,7 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
                                     touchingStorageComponent
                             );
                         } catch (Exception e) {
-                            // ignore write failures here; they indicate the holder path will persist state later
+                            // ignore failures for now
                         }
                     }
                 }
@@ -206,7 +206,7 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         // update component with positions
         energy.setConnectedGenerators(connected);
 
-        // provide a safe lookup to update cached aggregates (avoid throwing during system tick)
+        //  safe lookup to update cached aggregates (avoid throwing during system tick)
         energy.updateConnectedAggregates(pos -> {
             Holder<ChunkStore> h = safeGetHolder(world, pos.x, pos.y, pos.z);
             if (h == null) return null;
@@ -233,7 +233,7 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
                         energy
                 );
             } catch (Exception e) {
-                // ignore; store will persist via holder path if necessary
+                // ignore for now
             }
         }
     }

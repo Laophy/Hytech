@@ -4,7 +4,7 @@
   },
   "Icon": "Icons/ItemsGenerated/Hytech_Wire_Straight.png",
   "Categories": [
-    "Blocks.Deco"
+    "Hytech_Category.Components"
   ],
   "Interactions": {
     "Primary": "Block_Primary",

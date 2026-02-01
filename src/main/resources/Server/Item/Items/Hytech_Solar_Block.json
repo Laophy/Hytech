@@ -5,7 +5,7 @@
   "ItemLevel": 600,
   "Icon": "Icons/ItemsGenerated/Hytech_Solar_Block.png",
   "Categories": [
-    "Blocks.Soils"
+    "Hytech_Category.Components"
   ],
   "PlayerAnimationsId": "Block",
   "Set": "Soil",

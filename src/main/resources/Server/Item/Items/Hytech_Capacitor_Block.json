@@ -4,7 +4,7 @@
   },
   "ItemLevel": 600,
   "Categories": [
-    "Blocks.Soils"
+    "Hytech_Category.Components"
   ],
   "PlayerAnimationsId": "Block",
   "Set": "Soil",

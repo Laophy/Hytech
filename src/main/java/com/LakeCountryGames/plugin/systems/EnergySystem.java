@@ -26,44 +26,44 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
 
     @Override
     public void tick(float dt, int index, @Nonnull ArchetypeChunk archetypeChunk, @Nonnull Store store, @Nonnull CommandBuffer commandBuffer) {
+        // Only generator-marked blocks are returned by the query now, so work is limited.
         BlockSection blocks = (BlockSection) archetypeChunk.getComponent(index, BlockSection.getComponentType());
         assert blocks != null;
 
         EnergyComponent energy = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
+        if (energy == null) return;
 
-        // Tick the component
-        assert energy != null;
-        energy.onComponentTicked(dt); // Tick our energy component
+        // Per-tick lightweight work
+        energy.onComponentTicked(dt);
+        onHandleEnergyGeneration(dt, energy); // generation happens every tick
 
-        onHandleEnergyGeneration(dt, energy); // Tick the energy generation logic
-        updateConnectedGeneratorsForComponent(index, archetypeChunk, commandBuffer); // Update connected generators
-        onHandleTransferEnergy(dt, index, archetypeChunk, store, commandBuffer); // Tick the energy transfer logic
-    }
+        // Heavy network logic (BFS + transfers + connected aggregates) runs only when cooldown allows.
+        if (energy.shouldProcessNetworkTick()) {
+            // compute world/positions
+            BlockModule.BlockStateInfo stateInfo = (BlockModule.BlockStateInfo) archetypeChunk.getComponent(index, BlockModule.BlockStateInfo.getComponentType());
+            if (stateInfo == null) return;
+            WorldChunk wc = (WorldChunk) commandBuffer.getComponent(stateInfo.getChunkRef(), WorldChunk.getComponentType());
+            if (wc == null) return;
 
-    public void onHandleEnergyGeneration(float dt, EnergyComponent energy) {
-        // Handle energy generation logic here
-        if(energy.getType() == EnergyComponent.Type.GENERATOR){
-            energy.insert(energy.getEnergyPerTick()); // Generate energy per tick simple for now
+            int i = stateInfo.getIndex();
+            int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
+            int y = ChunkUtil.yFromBlockInColumn(i);
+            int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
+            Vector3i start = new Vector3i(x, y, z);
+
+            updateConnectedGeneratorsForComponent(index, archetypeChunk, commandBuffer);
+            onHandleTransferEnergy(dt, index, archetypeChunk, store, commandBuffer);
         }
     }
 
-    // Check for neighbors and transfer energy accordingly
-    //
-    //  This tick happens on every single block with an EnergyComponent
+    public void onHandleEnergyGeneration(float dt, EnergyComponent energy) {
+        if(energy.getType() == EnergyComponent.Type.GENERATOR){
+            energy.insert(energy.getEnergyPerTick());
+        }
+    }
+
     public void onHandleTransferEnergy(float dt, int index, @Nonnull ArchetypeChunk archetypeChunk, @Nonnull Store store, @Nonnull CommandBuffer commandBuffer) {
-        // Handle energy transfer logic here
-
-        // Is a storage block touching a generator block (not checking for wires)
-        checkForTouchingStorage(dt, index, archetypeChunk, store, commandBuffer);
-
-
-        // TODO: Review and update the wire transfer logic....
-        EnergyComponent energy = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
-        if (energy == null) return;
-
-        // Only generators actively push energy through networks
-        if (energy.getType() != EnergyComponent.Type.GENERATOR) return;
-
+        // Transfer logic expects generator context; the query ensures the entity is a generator.
         BlockModule.BlockStateInfo stateInfo = (BlockModule.BlockStateInfo) archetypeChunk.getComponent(index, BlockModule.BlockStateInfo.getComponentType());
         if (stateInfo == null) return;
         WorldChunk wc = (WorldChunk) commandBuffer.getComponent(stateInfo.getChunkRef(), WorldChunk.getComponentType());
@@ -74,6 +74,9 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         int y = ChunkUtil.yFromBlockInColumn(i);
         int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
         Vector3i start = new Vector3i(x, y, z);
+
+        EnergyComponent energy = (EnergyComponent) archetypeChunk.getComponent(index, Hytech.get().getEnergyComponentType());
+        if (energy == null) return;
 
         transferEnergyThroughNetwork(energy, start, wc.getWorld(), wc, commandBuffer);
     }
@@ -92,17 +95,9 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
             BlockModule.BlockStateInfo stateInfo = (BlockModule.BlockStateInfo) archetypeChunk.getComponent(index, BlockModule.BlockStateInfo.getComponentType());
             WorldChunk wc = (WorldChunk) commandBuffer.getComponent(stateInfo.getChunkRef(), WorldChunk.getComponentType());
 
-//            int i = stateInfo.getIndex();
-//            int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
-//            int y = ChunkUtil.yFromBlockInColumn(i);
-//            int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
-//
-//            Vector3i startingBlockPositionToScan = new Vector3i(x, y, z);
-
-            // TODO: Function that will take the startingBlock and check all 6 sides for EnergyComponents
+            // Use safe neighbor scan that avoids calling CommandBuffer with null refs
             scanAdjacentForStorage(generatorComponent, wc.getWorld(), wc, commandBuffer);
 
-            //LOGGER.atInfo().log("Checking for a touching storage (im a generator).... (" + energy.getEnergy() + " energy)");
             return false;
         }
 
@@ -119,15 +114,18 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
                 continue;
             }
 
-            // Prefer any pending update in the command buffer so multiple generators accumulate correctly
-            EnergyComponent touchingStorageComponent = (EnergyComponent) commandBuffer.getComponent(
-                    wc.getBlockComponentEntity(neighbor.x, neighbor.y, neighbor.z),
-                    Hytech.get().getEnergyComponentType()
-            );
+            // Try command buffer first, but guard against null Ref from wc.getBlockComponentEntity(...)
+            Ref<ChunkStore> neighborRef = wc.getBlockComponentEntity(neighbor.x, neighbor.y, neighbor.z);
+            EnergyComponent touchingStorageComponent = null;
 
-//            if (touchingStorageComponent == null) {
-//                touchingStorageComponent = holder.getComponent(Hytech.get().getEnergyComponentType());
-//            }
+            if (neighborRef != null) {
+                touchingStorageComponent = (EnergyComponent) commandBuffer.getComponent(neighborRef, Hytech.get().getEnergyComponentType());
+            }
+
+            // Fallback to holder if nothing in command buffer
+            if (touchingStorageComponent == null) {
+                touchingStorageComponent = holder.getComponent(Hytech.get().getEnergyComponentType());
+            }
 
             if (touchingStorageComponent != null && touchingStorageComponent.getType() == EnergyComponent.Type.STORAGE) {
                 float transferable = Math.min(
@@ -142,11 +140,14 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
                     touchingStorageComponent.insert(transferable); // Insert into neighbor storage
                     generatorComponent.extract(transferable); // Extract from self generator
 
-                    commandBuffer.putComponent(
-                            wc.getBlockComponentEntity(neighbor.x, neighbor.y, neighbor.z),
-                            Hytech.get().getEnergyComponentType(),
-                            touchingStorageComponent
-                    );
+                    // Only put to command buffer if we have a valid Ref
+                    if (neighborRef != null) {
+                        commandBuffer.putComponent(
+                                neighborRef,
+                                Hytech.get().getEnergyComponentType(),
+                                touchingStorageComponent
+                        );
+                    }
                 }
             }
         }
@@ -187,11 +188,14 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
         });
 
         // persist the updated component so later systems / commands see it
-        commandBuffer.putComponent(
-                wc.getBlockComponentEntity(start.x, start.y, start.z),
-                Hytech.get().getEnergyComponentType(),
-                energy
-        );
+        Ref<ChunkStore> startRef = wc.getBlockComponentEntity(start.x, start.y, start.z);
+        if (startRef != null) {
+            commandBuffer.putComponent(
+                    startRef,
+                    Hytech.get().getEnergyComponentType(),
+                    energy
+            );
+        }
     }
 
     /**
@@ -277,14 +281,16 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
             }
         }
 
-        // Fill storages in BFS order closest first until generator energy is exhausted
+        // Fill storages in BFS order closest first until generator energy is empty
         for (Vector3i storagePos : foundStorages) {
             if (generatorComponent.getEnergy() <= 0f) break;
 
-            EnergyComponent storageComp = (EnergyComponent) commandBuffer.getComponent(
-                    wc.getBlockComponentEntity(storagePos.x, storagePos.y, storagePos.z),
-                    Hytech.get().getEnergyComponentType()
-            );
+            Ref<ChunkStore> storageRef = wc.getBlockComponentEntity(storagePos.x, storagePos.y, storagePos.z);
+            EnergyComponent storageComp = null;
+
+            if (storageRef != null) {
+                storageComp = (EnergyComponent) commandBuffer.getComponent(storageRef, Hytech.get().getEnergyComponentType());
+            }
 
             if (storageComp == null) {
                 Holder<ChunkStore> h = world.getBlockComponentHolder(storagePos.x, storagePos.y, storagePos.z);
@@ -300,25 +306,29 @@ public class EnergySystem extends EntityTickingSystem<ChunkStore> {
                 storageComp.insert(transferable);
                 generatorComponent.extract(transferable);
 
-                commandBuffer.putComponent(
-                        wc.getBlockComponentEntity(storagePos.x, storagePos.y, storagePos.z),
-                        Hytech.get().getEnergyComponentType(),
-                        storageComp
-                );
+                if (storageRef != null) {
+                    commandBuffer.putComponent(
+                            storageRef,
+                            Hytech.get().getEnergyComponentType(),
+                            storageComp
+                    );
+                }
             }
         }
 
-        // Persist generator changes as well
-        commandBuffer.putComponent(
-                wc.getBlockComponentEntity(start.x, start.y, start.z),
-                Hytech.get().getEnergyComponentType(),
-                generatorComponent
-        );
+        Ref<ChunkStore> genRef = wc.getBlockComponentEntity(start.x, start.y, start.z);
+        if (genRef != null) {
+            commandBuffer.putComponent(
+                    genRef,
+                    Hytech.get().getEnergyComponentType(),
+                    generatorComponent
+            );
+        }
     }
 
     @Nonnull
     @Override
     public Query<ChunkStore> getQuery() {
-        return Query.and(BlockModule.BlockStateInfo.getComponentType(), Hytech.get().getEnergyComponentType());
+        return Query.and(BlockModule.BlockStateInfo.getComponentType(), Hytech.get().getGeneratorMarkerType());
     }
 }

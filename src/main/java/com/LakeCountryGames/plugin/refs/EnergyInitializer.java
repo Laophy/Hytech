@@ -18,30 +18,27 @@ public class EnergyInitializer extends RefSystem<ChunkStore> {
 
     @Override
     public void onEntityAdded(@NotNull Ref ref, @NotNull AddReason addReason, @NotNull Store store, @NotNull CommandBuffer commandBuffer) {
-        // Player store
-        // Player player = (Player) store.getComponent(ref, Player.getComponentType());
-        // player.sendMessage(Message.raw("EnergyInitializer triggered onEntityAdded"));
-
         BlockModule.BlockStateInfo info = (BlockModule.BlockStateInfo) commandBuffer.getComponent(ref, BlockModule.BlockStateInfo.getComponentType());
         if (info == null) return;
 
         EnergyComponent energy = (EnergyComponent) commandBuffer.getComponent(ref, Hytech.get().getEnergyComponentType());
         if (energy != null) {
-            // We found the block being added?
-            //player.sendMessage(Message.raw("is energy???"));
             LOGGER.atInfo().log(energy.getType() + " was added from the world!");
 
-            // Init any component things we need
             WorldChunk wc = (WorldChunk) commandBuffer.getComponent(info.getChunkRef(), WorldChunk.getComponentType());
-
             int i = info.getIndex();
             int x = ChunkUtil.worldCoordFromLocalCoord(wc.getX(), ChunkUtil.xFromBlockInColumn(i));
             int y = ChunkUtil.yFromBlockInColumn(i);
             int z = ChunkUtil.worldCoordFromLocalCoord(wc.getZ(), ChunkUtil.zFromBlockInColumn(i));
 
-            // Helper to save block location
             Vector3i blockPos = new Vector3i(x, y, z);
             energy.setBlockPosition3d(blockPos);
+
+            // If this is a generator, attach the lightweight marker so the EnergySystem query is selective.
+            if (energy.getType() == EnergyComponent.Type.GENERATOR) {
+                // Add marker so EnergySystem only ticks generator-marked blocks.
+                commandBuffer.putComponent(ref, Hytech.get().getGeneratorMarkerType(), new com.LakeCountryGames.plugin.components.GeneratorMarker());
+            }
         } else {
             LOGGER.atInfo().log("SOMETHING NON ENERGY WAS REMOVED FROM THE WORLD!");
         }

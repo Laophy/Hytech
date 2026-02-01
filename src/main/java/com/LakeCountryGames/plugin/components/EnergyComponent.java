@@ -1,14 +1,9 @@
-// java
-// File: src/main/java/com/LakeCountryGames/plugin/components/EnergyComponent.java
-
 package com.LakeCountryGames.plugin.components;
 
-import com.LakeCountryGames.plugin.Hytech;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
-import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -62,15 +57,16 @@ public class EnergyComponent implements Component<ChunkStore> {
     private float storageRate;
     private Vector3i blockPosition3d;
 
-    // New: positions of connected generators (including self if generator)
-    // Use a synchronized set to allow simple concurrent access patterns.
     private final Set<Vector3i> connectedGenerators = Collections.synchronizedSet(new HashSet<>());
 
-    // Cached aggregates for quick reads after an update
+    // Cached aggregate values
     private volatile float connectedTotalEnergy = 0f;
     private volatile float connectedTotalCapacity = 0f;
     private volatile float connectedTotalEnergyPerTick = 0f;
     private volatile float connectedTotalStorageRate = 0f;
+
+    private int networkCooldownTicks = 0;
+    private static final int NETWORK_TICK_INTERVAL = 5;
 
     public EnergyComponent() {
         this.type = Type.STORAGE;
@@ -113,8 +109,7 @@ public class EnergyComponent implements Component<ChunkStore> {
     /**
      * Block tick sent from EnergySystem
      */
-    public void onComponentTicked(float dt) {
-    }
+    public void onComponentTicked(float dt) {}
 
     public Vector3i getBlockPosition3d() {
         return blockPosition3d;
@@ -161,10 +156,6 @@ public class EnergyComponent implements Component<ChunkStore> {
      */
     public void setStorageRate(float rate) {
         this.storageRate = rate;
-    }
-
-    public static ComponentType<ChunkStore, EnergyComponent> getComponentType() {
-        return Hytech.get().getEnergyComponentType();
     }
 
     // Finds saved component info
@@ -269,5 +260,26 @@ public class EnergyComponent implements Component<ChunkStore> {
         synchronized (connectedGenerators) {
             return connectedGenerators.size();
         }
+    }
+
+    /**
+     * Cooldown API: run heavy network ops only every NETWORK_TICK_INTERVAL ticks.
+     * Returns true when network ops should run this tick.
+     */
+    public boolean shouldProcessNetworkTick() {
+        if (networkCooldownTicks <= 0) {
+            networkCooldownTicks = NETWORK_TICK_INTERVAL;
+            return true;
+        } else {
+            networkCooldownTicks--;
+            return false;
+        }
+    }
+
+    /**
+     * Reset cooldown
+     */
+    public void resetNetworkCooldown() {
+        this.networkCooldownTicks = 0;
     }
 }

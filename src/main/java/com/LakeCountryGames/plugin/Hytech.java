@@ -2,6 +2,7 @@ package com.LakeCountryGames.plugin;
 
 import com.LakeCountryGames.plugin.commands.ExampleCommand;
 import com.LakeCountryGames.plugin.components.EnergyComponent;
+import com.LakeCountryGames.plugin.components.GeneratorMarker;
 import com.LakeCountryGames.plugin.interactions.ConfigureSolarInteraction;
 import com.LakeCountryGames.plugin.refs.EnergyInitializer;
 import com.LakeCountryGames.plugin.systems.EnergySystem;
@@ -16,6 +17,7 @@ public class Hytech extends JavaPlugin {
     private static Hytech instance;
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private ComponentType<ChunkStore, EnergyComponent> energyComponentType;
+    private ComponentType<ChunkStore, GeneratorMarker> generatorMarkerType;
 
 
     public Hytech(JavaPluginInit init) {
@@ -33,6 +35,7 @@ public class Hytech extends JavaPlugin {
                 .register("ConfigureSolar", ConfigureSolarInteraction.class, ConfigureSolarInteraction.CODEC);
 
         this.energyComponentType = this.getChunkStoreRegistry().registerComponent(EnergyComponent.class, "EnergyComponent", EnergyComponent.CODEC);
+        this.generatorMarkerType = this.getChunkStoreRegistry().registerComponent(GeneratorMarker.class, "GeneratorMarker", GeneratorMarker.CODEC);
     }
 
     @Override
@@ -43,6 +46,10 @@ public class Hytech extends JavaPlugin {
 
     public ComponentType<ChunkStore, EnergyComponent> getEnergyComponentType() {
         return this.energyComponentType;
+    }
+
+    public ComponentType<ChunkStore, GeneratorMarker> getGeneratorMarkerType() {
+        return this.generatorMarkerType;
     }
 
     public static Hytech get() {
